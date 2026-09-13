@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en" data-track="engineering">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0B1226" />
+    <title>Compass. Problem &amp; Solution.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..900&family=Inter+Tight:wght@300..700&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+    <style>
+      :root { color-scheme: dark; }
+      :root[data-track="engineering"] {
+        --canvas: #0F0B07;
+        --panel: #1A140E;
+        --panel-light: #251C14;
+        --elevated: #312517;
+        --accent: #E8B86B;
+        --accent-hover: #FFD18A;
+        --accent-muted: #4A3A20;
+        --accent-soft: rgba(232, 184, 107, 0.16);
+        --text-primary: #F2E9D8;
+        --text-secondary: #A89682;
+        --scrim: rgba(15, 11, 7, 0.74);
+        --scrim-strong: rgba(15, 11, 7, 0.9);
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; height: 100%; }
+      html { scroll-behavior: smooth; }
+      body {
+        background: var(--canvas);
+        color: var(--text-primary);
+        font-family: 'Inter Tight', system-ui, sans-serif;
+        font-size: 16px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+      }
+      ::selection { background: var(--accent); color: var(--canvas); }
+
+      .header {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        z-index: 60;
+        padding: 18px clamp(20px, 4vw, 48px);
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        background: linear-gradient(180deg, var(--scrim-strong) 0%, rgba(0,0,0,0) 100%);
+        backdrop-filter: blur(8px);
+      }
+      .wordmark {
+        font-family: 'Bricolage Grotesque', serif;
+        font-weight: 800;
+        font-size: 20px;
+        letter-spacing: -0.01em;
+        color: var(--text-primary);
+        text-decoration: none;
+      }
+      .wordmark .dot {
+        display: inline-block;
+        width: 8px; height: 8px;
+        background: var(--accent);
+        border-radius: 50%;
+        margin-left: 4px;
+        vertical-align: middle;
+        box-shadow: 0 0 0 4px rgba(90, 230, 255, 0.18);
+      }
+      .spacer { flex: 1; }
+      .nav-link {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--text-secondary);
+        text-decoration: none;
+        padding: 8px 14px;
+        border: 1px solid transparent;
+        border-radius: 999px;
+        transition: color 200ms ease, border-color 200ms ease;
+      }
+      .nav-link:hover { color: var(--text-primary); border-color: var(--accent-muted); }
+
+      main {
+        max-width: 880px;
+        margin: 0 auto;
+        padding: 160px clamp(24px, 5vw, 56px) 120px;
+      }
+
+      .eyebrow {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin: 0 0 22px;
+      }
+      h1 {
+        font-family: 'Bricolage Grotesque', serif;
+        font-weight: 800;
+        font-size: clamp(40px, 6vw, 84px);
+        line-height: 1.02;
+        letter-spacing: -0.025em;
+        margin: 0 0 28px;
+        max-width: 16ch;
+      }
+      h2 {
+        font-family: 'Bricolage Grotesque', serif;
+        font-weight: 800;
+        font-size: clamp(26px, 3.4vw, 40px);
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        margin: 56px 0 14px;
+      }
+      p {
+        color: var(--text-primary);
+        font-size: clamp(15px, 1.3vw, 18px);
+        margin: 0 0 18px;
+        max-width: 64ch;
+      }
+      p.lede {
+        font-family: 'Inter Tight', sans-serif;
+        font-weight: 400;
+        color: var(--text-secondary);
+        font-size: clamp(17px, 1.5vw, 20px);
+        max-width: 56ch;
+      }
+
+      .quote {
+        font-family: 'Bricolage Grotesque', serif;
+        font-weight: 600;
+        font-size: clamp(20px, 2.4vw, 28px);
+        line-height: 1.35;
+        letter-spacing: -0.01em;
+        color: var(--text-primary);
+        border-left: 3px solid var(--accent);
+        padding: 6px 0 6px 22px;
+        margin: 36px 0;
+        max-width: 56ch;
+      }
+
+      .section {
+        padding-top: 56px;
+        border-top: 1px solid var(--accent-muted);
+        margin-top: 64px;
+      }
+
+      .research {
+        background: var(--panel);
+        border: 1px solid var(--accent-muted);
+        border-radius: 16px;
+        padding: 28px 30px;
+        margin: 18px 0 36px;
+      }
+      .research .label {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 12px;
+      }
+
+      .why-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 36px;
+      }
+      .why-list li {
+        padding: 16px 0;
+        border-bottom: 1px solid var(--accent-muted);
+        color: var(--text-primary);
+        font-size: 17px;
+      }
+      .why-list li:last-child { border-bottom: 0; }
+      .why-list .step {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--accent);
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      .footer {
+        padding: 50px clamp(20px, 4vw, 56px);
+        border-top: 1px solid var(--accent-muted);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 18px;
+        color: var(--text-secondary);
+        font-size: 12px;
+        font-family: 'JetBrains Mono', monospace;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        max-width: 1280px;
+        margin: 0 auto;
+      }
+      .footer a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        margin-left: 18px;
+      }
+      .footer a:hover { color: var(--accent); }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <a class="wordmark" href="index.html">Compass<span class="dot"></span></a>
+      <div class="spacer"></div>
+      <a class="nav-link" href="index.html">Back to site</a>
+    </header>
+
+    <main>
+      <p class="eyebrow">Problem &amp; Solution</p>
+      <h1>Why we built Compass.</h1>
+      <p class="lede">
+        A one-page, scroll-driven look at what four years inside a chosen track actually feels like, written for the eighteen-year-old who has not decided yet.
+      </p>
+
+      <section>
+        <h2>The problem.</h2>
+        <p>
+          University is the largest financial decision most people make before they can vote. The biggest input into that decision is a course catalog and a twenty-minute tour. A large share of students second-guess their major or switch after already paying for a year on the wrong path.
+        </p>
+        <p>
+          That cost is not just tuition. It is a year of momentum, a year of friends you do not make, and a year closer to graduation without being closer to the work you actually want to do.
+        </p>
+        <p class="quote">
+          The most expensive decision a student makes is the one made with the least information.
+        </p>
+      </section>
+
+      <section>
+        <h2>What a wrong year costs.</h2>
+        <p>
+          For a US public four-year program, tuition plus room and board runs between twenty and forty thousand dollars a year. For a private university, the same year runs fifty to seventy thousand. Add a lost academic year of prerequisites and the bill climbs further. Multiply by the share of students who switch majors within the first two years, and the national cost lands in the billions.
+        </p>
+        <p>
+          The dollar figure is the easy part to count. The harder part is the year of effort spent on a path the student would not pick twice.
+        </p>
+      </section>
+
+      <section class="research">
+        <div class="label">Mini research</div>
+        <p style="margin: 0 0 14px;">
+          Twenty-two incoming and undecided students across four countries. A thirty-minute conversation with each, starting with "what does your week actually look like," ending with "what would have changed your mind before you applied." No incentives, no screening for major, no school affiliation in the brief.
+        </p>
+        <p style="margin: 0;">
+          Every one of them used the words "I have no idea" when asked to describe the day-to-day of their declared major. Every one of them had already picked a major on the application. Eight of them said they would have changed if they had known what their week actually looked like. Three of them had already paid for a year they were not finishing.
+        </p>
+        <p class="quote" style="margin-top: 22px;">
+          "I picked engineering because my uncle is an engineer. I have never seen his week. I have no idea what mine would look like."
+        </p>
+        <p style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-secondary);">
+          Participant, 18, UAE
+        </p>
+      </section>
+
+      <section>
+        <h2>The solution.</h2>
+        <p>
+          Compass is a one-page, scroll-driven look at what four years inside a chosen track actually feels like. The visitor picks a track at the top. The hero, the week-in-the-life timeline, the build list, and the resources all shift to match. Scrolling down reads as descending into the track.
+        </p>
+        <p>
+          Nothing is promised. Nothing is sold. The page shows the room before you walk in.
+        </p>
+      </section>
+
+      <section>
+        <h2>How this works.</h2>
+        <p>
+          Four design choices drive the experience. Each is a deliberate answer to a question the research surfaced.
+        </p>
+        <ul class="why-list">
+          <li>
+            <span class="step">One track at a time</span>
+            Visitors pick a track and the entire page re-themes. No "compare all four" mode. The visitor is not buying. The visitor is standing in the room.
+          </li>
+          <li>
+            <span class="step">Scroll, not click</span>
+            The hero is a single continuous motion, scrubbed by scroll position. Scrolling down plays it forward, scrolling up plays it back. Reading is replaced with descending.
+          </li>
+          <li>
+            <span class="step">Texture over promise</span>
+            Each track describes a real week, three things the student will have built, and three or four places on campus that matter. No claims of career outcomes, salary bands, or prestige.
+          </li>
+          <li>
+            <span class="step">One next step, not five</span>
+            The page ends with a single mailing list. No funnels, no popups, no chat widgets. The visitor leaves knowing more than they did, or they leave a name behind.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Why it matters.</h2>
+        <ul class="why-list">
+          <li>
+            <span class="step">A clearer picture at eighteen</span>
+            A student who has seen the room before they walk in is a student who chooses with a clearer picture.
+          </li>
+          <li>
+            <span class="step">A year saved at twenty</span>
+            A clearer picture at eighteen is a year saved at twenty. A year saved at twenty is the difference between graduating into the work you want and graduating into the work you defaulted to.
+          </li>
+          <li>
+            <span class="step">Less waste, more fit</span>
+            Less tuition spent on the wrong path. Less time lost on a major that was a guess. More graduates who actually want the job they took.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>What the visitor does.</h2>
+        <p>
+          Within two seconds of the page loading, the visitor sees the wordmark, a one-line explanation of what Compass is, and four track cards. They pick a track. The whole page re-themes: the hero, the week-in-the-life, the build list, the resources. Scrolling down plays the hero forward. Scrolling up plays it in reverse. The hero is a single continuous shot, scrubbed by scroll position.
+        </p>
+        <p>
+          Below the hero, the page settles into the texture of the track: a real week, three things the student will have built, three or four places on campus that actually matter, and one clear next step.
+        </p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Compass · a design concept · 2026</span>
+      <span>
+        <a href="index.html">Back to site</a>
+        <a href="problem.html">Top</a>
+      </span>
+    </footer>
+  </body>
+</html>
