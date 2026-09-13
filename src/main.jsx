@@ -1,0 +1,13 @@
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './App.jsx';
+import './styles/global.css';
+
+const root = createRoot(document.getElementById('root'));
+root.render(<App />);
+
+// Remove the boot frame after the first paint
+requestAnimationFrame(() => {
+  const boot = document.getElementById('boot');
+  if (boot) boot.remove();
+});
